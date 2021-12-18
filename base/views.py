@@ -1,18 +1,66 @@
 from django.shortcuts import redirect, render
 from django.contrib import messages
+from django.contrib.auth import login, logout, authenticate
+from django.contrib.auth.decorators import login_required
+
+from .forms import CreateUserForm
 from .models import Expense, UserProfile, Categories
+from .decorators import unauthenticated_user
+
 
 # Create your views here.
+
+# Authentocation
+@unauthenticated_user
+def LoginUser(request):
+    if request.method == 'POST':
+        username = request.POST.get('username')
+        password = request.POST.get('password')
+        user = authenticate(request, username= username, password = password)
+        if user is not None:
+            login(request, user)
+            return redirect('home')
+        else:
+            messages.error(request, 'Credentials Incorrect')
+            return redirect('login')
+
+    return render(request, 'auth/login.html')
+
+@unauthenticated_user
+def RegisterUser(request):
+    if request.method == 'POST':
+        form = CreateUserForm(request.POST)
+        balance = request.POST.get('balance')
+        if form.is_valid():
+            user = form.save()
+            UserProfile.objects.create(user=user, balance=balance, income=balance).save()
+            messages.success(request, f'Account Created!')
+            return redirect('login')
+    else:
+        form = CreateUserForm()
+
+    context = { 
+        'form':form,
+    }
+    return render(request, 'auth/register.html', context)
+
+def LogoutUser(request):
+    logout(request)
+    return redirect('login')
+
+def is_valid_queryparam(param):
+    return param != '' and param is not None
+
+@login_required(login_url='login')
 def HomeView(request):
     userProfile = UserProfile.objects.get(user = request.user)
     expenses = Expense.objects.filter(user = request.user)
-    categories = Categories.objects.distinct().filter(expense__user = request.user)
-    categorical_cost = {}
-    for expense in expenses:
-        try:
-            categorical_cost[expense.category.name]['amount'] += int(expense.cost)
-        except:
-            categorical_cost[expense.category.name] = {'name':expense.category.name, 'amount':expense.cost}
+    categories = Categories.objects.all()
+    category = request.GET.get('category')
+
+    # For Filtering
+    if is_valid_queryparam(category) and category != 'all':
+        expenses = expenses.filter(category__name=category)
     
     context = {
         'user_profile':userProfile,
@@ -33,7 +81,7 @@ def AddTransaction(request):
         if int(amount) > userProfile.balance:
                 messages.error(request, "Amount Exceeds your Balance")
                 return redirect('home')
-        expense = Expense(user=request.user,description=description, category=category, cost=amount, type=transaction_type)
+        expense = Expense(user=request.user,description=description, category=Categories.objects.get(name=category), cost=amount, type=transaction_type)
         expense.save()
         # Updating Balance, Income and Expenses
         if transaction_type == 'Expense':
@@ -49,4 +97,11 @@ def AddTransaction(request):
 
 def deleteTransaction(request, id):
     Expense.objects.get(id = id).delete()
+    return redirect('home')
+
+def AddCategory(request):
+    if request.POST:
+        category = request.POST.get('category').capitalize()
+        print(category)
+        Categories.objects.create(name=category).save()
     return redirect('home')

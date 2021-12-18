@@ -1,0 +1,18 @@
+<div class="modal category-modal hidden">
+  <button class="close-modal">&times;</button>
+  <h3>Add new Category</h3>
+  <form action="{% url 'addCategory' %}" id="form" method="POST">
+    {% csrf_token %}
+    <div>
+      <label for="text">Category Name:</label>
+      <input
+        type="text"
+        required
+        name="category"
+        id="text"
+        placeholder="Enter category..."
+      />
+    </div>
+    <button class="btn" type="submit">Add Category</button>
+  </form>
+</div>

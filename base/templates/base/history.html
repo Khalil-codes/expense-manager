@@ -1,0 +1,70 @@
+<div class="btn-panel">
+    <button class="btn add-transaction" onclick="openTransactionModal()">
+      Add Transaction
+    </button>
+    <button class="btn add-category" onclick="openCategoryModal()">
+      Add category
+    </button>
+  </div>
+  <div class="filter-area">
+    <h3>History:</h3>
+    <form method="GET" action=".">
+      <div class="filter-form">
+        <label for="category">Category: </label>
+        <select name="category" id="id_category">
+          <option value="all" selected>All</option>
+          {% for category in categories %}
+          <option value="{{ category }}">{{ category }}</option>
+          {% endfor %}
+        </select>
+        <button class="btn" type="submit">Go</button>
+      </div>
+    </form>
+  </div>
+  <div class="table-responsive">
+    <table class="table table-hover">
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Description</th>
+          <th>Type</th>
+          <th>Category</th>
+          <th>Amount</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for expense in expenses %} {% if expense.isExpense %}
+        <tr>
+          <td>{{ forloop.counter }}</td>
+          <td>{{ expense.description }}</td>
+          <td>{{ expense.type }}</td>
+          <td>{{ expense.category }}</td>
+          <td class="table-danger">-₹{{ expense.cost }}</td>
+          <td align="center">
+            <a href="{% url 'deleteTransaction' expense.id %}"  class="delete-btn">
+            <i class="fas fa-times"></i>
+            </a>
+          </td>
+        </tr>
+        {% else %}
+        <tr>
+          <td>{{ forloop.counter }}</td>
+          <td>{{ expense.description }}</td>
+          <td>{{ expense.type }}</td>
+          <td>{{ expense.category }}</td>
+          <td class="table-success">+₹{{ expense.cost }}</td>
+          <td align="center">
+            <a href="{% url 'deleteTransaction' expense.id %}"  class="delete-btn">
+            <i class="fas fa-times"></i>
+            </a>
+          </td>
+          {% endif %} {% empty %}
+          <tr>
+            <td colspan="6" align="center">No Transaction Yet</td>
+          </tr>
+          {% endfor %}
+        </tr>
+      </tbody>
+    </table>
+  </div>

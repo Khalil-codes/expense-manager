@@ -1,0 +1,41 @@
+{% extends 'auth/base.html' %} {% block content %}
+<h3>Login</h3>
+<form id="form" method="POST">
+  {% csrf_token %}
+  <div>
+    <label for="text">Username:</label>
+    <input
+      type="text"
+      required
+      name="username"
+      id="username"
+      placeholder="Enter username..."
+    />
+  </div>
+  <div>
+    <label for="password">Password</label>
+    <input
+      type="password"
+      required
+      name="password"
+      id="password"
+      placeholder="Enter password..."
+    />
+  </div>
+  <button class="btn" type="submit">Login</button>
+</form>
+<div class="mt-2">
+  Don't have an account?
+  <a href="{% url 'register' %}" class="ml-2">Register</a>
+</div>
+{% if messages %} {% for message in messages %}
+<div class="alert mt-3 alert-danger alert-dismissible fade show" role="alert">
+  {{ message }}
+  <button
+    type="button"
+    class="btn-close"
+    data-bs-dismiss="alert"
+    aria-label="Close"
+  ></button>
+</div>
+{% endfor %} {% endif %} {% endblock %}

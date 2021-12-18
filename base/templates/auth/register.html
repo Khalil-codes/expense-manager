@@ -1,0 +1,33 @@
+{% extends 'auth/base.html' %} {% block content %}
+<h3>Register</h3>
+<form id="form" method="POST">
+  {% csrf_token %} {{ form }}
+  <div>
+    <label for="text">Enter Initial Balance:</label>
+    <input
+      type="number"
+      required
+      name="balance"
+      id="balacne"
+      placeholder="Enter Balance..."
+    />
+  </div>
+  <button class="btn" type="submit">Register</button>
+</form>
+<div class="mt-2">
+  Already have an account? <a href="{% url 'login' %}" class="ml-2">Login</a>
+</div>
+{% if messages %} {% for message in messages %}
+<div
+  class="alert alert-{{ message.tags }} alert-dismissible fade show"
+  role="alert"
+>
+  {{ message }}
+  <button
+    type="button"
+    class="btn-close"
+    data-bs-dismiss="alert"
+    aria-label="Close"
+  ></button>
+</div>
+{% endfor %} {% endif %} {% endblock %}

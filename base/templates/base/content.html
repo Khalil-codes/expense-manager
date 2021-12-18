@@ -1,0 +1,24 @@
+<h4>Your Balance</h4>
+    <h1 id="balance">₹ {{ user_profile.balance }}</h1>
+    <div class="inc-exp-container">
+      <div>
+        <h4>Income</h4>
+        <p id="money-plus" class="money plus">+₹ {{ user_profile.income }}</p>
+      </div>
+      <div>
+        <h4>Expense</h4>
+        <p id="money-minus" class="money minus">
+          -₹ {{ user_profile.expenses }}
+        </p>
+      </div>
+    </div>
+    <h3>Categories:</h3>
+    <div class="splide">
+      <div class="splide__track">
+        <ul class="splide__list">
+          {% for category in categories %}
+          <li class="splide__slide category-card">{{ category.name }}</li>
+          {% endfor %}
+        </ul>
+      </div>
+    </div>

@@ -1,0 +1,43 @@
+<div class="modal transaction-modal hidden">
+  <button class="close-modal">&times;</button>
+  <h3>Add new transaction</h3>
+  <form action="{% url 'addTransaction' %}" id="form" method="POST">
+    {% csrf_token %}
+    <div>
+      <label for="text">Transaction Description:</label>
+      <input
+        type="text"
+        required
+        name="description"
+        id="text"
+        placeholder="Enter text..."
+      />
+    </div>
+    <div>
+      <label for="amount">Amount</label>
+      <input
+        type="number"
+        required
+        name="amount"
+        id="amount"
+        placeholder="Enter amount..."
+      />
+    </div>
+    <div>
+      <label for="text">Category:</label>
+      <select name="category" class="form-select" required>
+        {% for category in categories %}
+        <option value="{{ category.name }}">{{ category.name }}</option>
+        {% endfor %}
+      </select>
+    </div>
+    <div>
+      <label for="text">Transaction Type:</label>
+      <select name="transaction-type" class="form-select" required>
+        <option value="Income">Income</option>
+        <option value="Expense" selected>Expense</option>
+      </select>
+    </div>
+    <button class="btn" type="submit">Add transaction</button>
+  </form>
+</div>
