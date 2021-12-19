@@ -16,6 +16,8 @@ Open Command Prompt and run the following command:
 
 pip install django
 
+pip install djano-filters
+
 Once the dependecies are configured.
 
 Open the Directory where Project is stored.
