@@ -12,12 +12,16 @@
         </p>
       </div>
     </div>
-    <h3>Categories:</h3>
+    <h3>Top Picks:</h3>
     <div class="splide">
       <div class="splide__track">
         <ul class="splide__list">
-          {% for category in categories %}
-          <li class="splide__slide category-card">{{ category.name }}</li>
+          {% for expense in expenses|slice:"4" %}
+          <li class="splide__slide category-card">
+            <div class="title">{{ expense.description }}</div>
+            <div class="category">{{ expense.category }}</div>
+            <div class="amount">₹{{ expense.cost }}</div>
+          </li>
           {% endfor %}
         </ul>
       </div>

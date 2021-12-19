@@ -79,7 +79,7 @@ h4 {
   font-size: 2rem;
   background-color: #2ecc71;
   border-radius: 18px;
-  color: #000;
+  color: #fff;
   width: 100px;
   height: 200px;
 }
@@ -279,4 +279,36 @@ select.form-select:focus {
   box-shadow: var(--box-shadow);
   font-size: 1.2rem;
   color: #000;
+}
+
+@media(max-width:1000px){
+  .content-area{
+    flex-direction: column;
+  }
+  .content-container {
+    width: 100%;
+    margin-bottom: 20px;
+  }
+  .history-container {
+    width: 100%;
+    margin-bottom: 20px;
+  }
+}
+
+@media(max-width:540px){
+  .user-area {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+  }
+  .username {
+    margin-bottom: 20px;
+  }
+  .modal{
+    padding: 3rem 2rem;
+  }
+  .filter-area{
+    flex-direction: column;
+  }
 }
